@@ -6,10 +6,16 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Logger name="org.apache.ibatis" level="DEBUG" additivity="false">
+        <!-- 设置 MyBatis 的 SQL 日志级别为 DEBUG -->
+        <Logger name="org.apache.ibatis.executor" level="DEBUG" additivity="false">
             <AppenderRef ref="Console" />
         </Logger>
-        <Root level="info">
+        <!-- 可选：设置参数绑定日志 -->
+        <Logger name="org.apache.ibatis.mapping" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console" />
+        </Logger>
+        <!-- 设置 Root 日志级别为 INFO，避免其他日志干扰 -->
+        <Root level="INFO">
             <AppenderRef ref="Console" />
         </Root>
     </Loggers>
