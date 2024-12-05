@@ -9,4 +9,6 @@ public interface UserMapper {
     List<User> getAllUser();
 
     User getUserByUsername(@Param("username") String username);
+
+    Integer insertUser(@Param("username") String username, @Param("password") String password);
 }

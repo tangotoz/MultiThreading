@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tango.experiment.server.mapper.UserMapper">
+    <insert id="insertUser">
+        insert into t_user values(null, #{username}, #{password}, default, now(), now())
+    </insert>
     <select id="getAllUser" resultType="User">
         select * from t_user;
     </select>

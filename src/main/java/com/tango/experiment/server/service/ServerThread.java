@@ -42,7 +42,7 @@ public class ServerThread extends Thread {
         try {
             actionMap.put(ClientMsg.SEARCH_USER, (String[] args) ->  sendSuccessMsg(userMapper.getUserByUsername(args[0])));
             actionMap.put(ClientMsg.GET_ALL_USER, (String[] args) -> sendSuccessMsg(userMapper.getAllUser()));
-//            actionMap.put(ClientMsg.INSERT_USER, (String[] args) -> sendSuccessMsg(userDao.insertUser(new User(null , args[0], args[1], args[2], null, null))));
+            actionMap.put(ClientMsg.INSERT_USER, (String[] args) -> sendSuccessMsg(userMapper.insertUser(args[0], args[1])));
 //            actionMap.put(ClientMsg.DELETE_USER, (String[] args) -> sendSuccessMsg(userDao.deleteUser(args[0])));
 //            actionMap.put(ClientMsg.UPDATE_USER, (String[] args) -> sendSuccessMsg(userDao.updateUser(args[0], args[1], args[2], args[3])));
 //

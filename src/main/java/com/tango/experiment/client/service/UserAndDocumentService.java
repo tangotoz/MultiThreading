@@ -77,10 +77,10 @@ public class UserAndDocumentService {
 //        }.getType());
 //    }
 //
-//    public static void insertUser(String username, String password, String role) throws IOException, ClassNotFoundException {
-//        String[] args = {username, password, role};
-//        writeAndRead(ClientMsg.INSERT_USER, args);
-//    }
+    public static boolean insertUser(String username, String password) throws IOException, ClassNotFoundException {
+        String[] args = {username, password};
+        return ((Integer) writeAndRead(ClientMsg.INSERT_USER, args) != 0);
+    }
 //
 //    public static void deleteUser(int userId) throws IOException, ClassNotFoundException {
 //        String[] args = {String.valueOf(userId)};
