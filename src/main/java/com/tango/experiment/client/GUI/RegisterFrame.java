@@ -168,7 +168,7 @@ public class RegisterFrame extends JFrame {
             }
 
             // 保存用户数据
-            boolean success = UserAndDocumentService.insertUser(username, MD5Utils.encrypt(password));
+            boolean success = UserAndDocumentService.insertUser(username, MD5Utils.encrypt(password), "browser");
             if (success) {
                 JOptionPane.showMessageDialog(this, "注册成功，请登录", "成功", JOptionPane.INFORMATION_MESSAGE);
                 dispose();  // 关闭注册窗口

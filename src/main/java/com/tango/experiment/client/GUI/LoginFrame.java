@@ -182,7 +182,8 @@ public class LoginFrame extends JFrame implements ActionListener {
                 return;
             }
 
-            JOptionPane.showMessageDialog(this, "成功");
+            setVisible(false);
+            SwingUtilities.invokeLater(() -> new MainFrame(user, this));
         } catch (IOException | ClassNotFoundException e) {
             log.error("log error:{}", e.getMessage());
         }
@@ -229,5 +230,9 @@ public class LoginFrame extends JFrame implements ActionListener {
         int green = random.nextInt(256);
         int blue = random.nextInt(256);
         return new Color(red, green, blue);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(LoginFrame::new);
     }
 }

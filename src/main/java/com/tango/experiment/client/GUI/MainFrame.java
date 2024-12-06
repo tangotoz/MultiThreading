@@ -1,5 +1,6 @@
 package com.tango.experiment.client.GUI;
 
+import com.tango.experiment.client.GUI.JPanel.UserManagePanel;
 import com.tango.experiment.pojo.User;
 
 import javax.swing.*;
@@ -9,9 +10,8 @@ import java.sql.Timestamp;
 public class MainFrame extends JFrame {
     private User user;
 
-    public MainFrame() {
-        user = new User(1, "tango", "123456", "admin",
-                new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
+    public MainFrame(User user, LoginFrame loginFrame) {
+        this.user = user;
         init();
     }
 
@@ -25,12 +25,8 @@ public class MainFrame extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane();
 
         // 用户管理标签页
-        JPanel userManagementPanel = new JPanel();
-        userManagementPanel.setLayout(new BorderLayout());
-        JLabel userManagementLabel = new JLabel("用户管理", SwingConstants.CENTER);
-        userManagementLabel.setFont(new Font("Fira Code", Font.BOLD, 20));
-        userManagementPanel.add(userManagementLabel, BorderLayout.CENTER);
-        tabbedPane.addTab("用户管理", userManagementPanel);
+        UserManagePanel userManagePanel = new UserManagePanel();
+        tabbedPane.addTab("用户管理", userManagePanel);
 
         // 文档管理标签页
         JPanel documentManagementPanel = new JPanel();
@@ -52,10 +48,5 @@ public class MainFrame extends JFrame {
         add(tabbedPane);
 
         setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        // 启动主界面
-        SwingUtilities.invokeLater(MainFrame::new);
     }
 }

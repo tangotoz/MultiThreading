@@ -10,5 +10,11 @@ public interface UserMapper {
 
     User getUserByUsername(@Param("username") String username);
 
-    Integer insertUser(@Param("username") String username, @Param("password") String password);
+    Integer insertUser(@Param("username") String username, @Param("password") String password, @Param("role") String role);
+
+    Integer deleteUser(@Param("userId") Integer userId);
+
+    Integer updateUser(@Param("userId") Integer userId, @Param("username") String username, @Param("password") String password, @Param("role") String role);
+
+    List<User> getUserByLike(@Param("usernameLike") String usernameLike);
 }

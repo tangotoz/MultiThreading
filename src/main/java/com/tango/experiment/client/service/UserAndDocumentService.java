@@ -70,28 +70,31 @@ public class UserAndDocumentService {
         return (User) writeAndRead(ClientMsg.SEARCH_USER, args);
     }
 
-//    public static List<User> getAllUsers() throws IOException, ClassNotFoundException {
-//        String[] args = {};
-//        String json = (String) writeAndRead(ClientMsg.GET_ALL_USER, args);
-//        return new Gson().fromJson(json, new TypeToken<List<User>>() {
-//        }.getType());
-//    }
-//
-    public static boolean insertUser(String username, String password) throws IOException, ClassNotFoundException {
-        String[] args = {username, password};
+    public static List<User> getAllUser() throws IOException, ClassNotFoundException {
+        String[] args = {};
+        return (List<User>) writeAndRead(ClientMsg.GET_ALL_USER, args);
+    }
+
+    public static List<User> getUserByLike(String keyword) throws IOException, ClassNotFoundException {
+        String[] args = {keyword};
+        return (List<User>) writeAndRead(ClientMsg.LIKE_USER, args);
+    }
+
+    public static boolean insertUser(String username, String password, String role) throws IOException, ClassNotFoundException {
+        String[] args = {username, password, role};
         return ((Integer) writeAndRead(ClientMsg.INSERT_USER, args) != 0);
     }
-//
-//    public static void deleteUser(int userId) throws IOException, ClassNotFoundException {
-//        String[] args = {String.valueOf(userId)};
-//        writeAndRead(ClientMsg.DELETE_USER, args);
-//    }
-//
-//    public static void updateUser(String userId, String username, String password, String role) throws IOException, ClassNotFoundException {
-//        String[] args = {userId, username, password, role};
-//        writeAndRead(ClientMsg.UPDATE_USER, args);
-//    }
-//
+
+    public static boolean deleteUser(int userId) throws IOException, ClassNotFoundException {
+        String[] args = {String.valueOf(userId)};
+        return ((Integer) writeAndRead(ClientMsg.DELETE_USER, args) != 0);
+    }
+
+    public static boolean updateUser(String userId, String username, String password, String role) throws IOException, ClassNotFoundException {
+        String[] args = {userId, username, password, role};
+        return ((Integer) writeAndRead(ClientMsg.UPDATE_USER, args) != 0);
+    }
+
 //    public static List<Document> getAllDocs() throws IOException, ClassNotFoundException {
 //        String[] args = {};
 //        String json = (String) writeAndRead(ClientMsg.GET_ALL_DOC, args);

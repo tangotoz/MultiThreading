@@ -6,6 +6,7 @@ public class ClientMsg {
     public static final String UPDATE_USER = "UPDATE_USER";
     public static final String DELETE_USER = "DELETE_USER";
     public static final String INSERT_USER = "INSERT_USER";
+    public static final String LIKE_USER = "LIKE_USER";
     public static final String SEARCH_DOC = "SEARCH_DOC";
     public static final String INSERT_DOC = "INSERT_DOC";
     public static final String GET_ALL_DOC = "GET_ALL_DOC";

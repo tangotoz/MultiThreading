@@ -2,12 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tango.experiment.server.mapper.UserMapper">
     <insert id="insertUser">
-        insert into t_user values(null, #{username}, #{password}, default, now(), now())
+        insert into t_user values(null, #{username}, #{password}, #{role}, now(), now())
     </insert>
+    <update id="updateUser">
+        update t_user set username=#{username}, password=#{password}, role=#{role}, update_at = now() where user_id = #{userId}
+    </update>
+    <delete id="deleteUser">
+        delete from t_user where user_id=#{userId}
+    </delete>
     <select id="getAllUser" resultType="User">
         select * from t_user;
     </select>
     <select id="getUserByUsername" resultType="User">
         select * from t_user where username=#{username}
+    </select>
+    <select id="getUserByLike" resultType="User">
+        select * from t_user where username like concat('%', #{usernameLike}, '%')
     </select>
 </mapper>

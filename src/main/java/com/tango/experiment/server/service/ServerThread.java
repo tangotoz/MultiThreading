@@ -42,10 +42,10 @@ public class ServerThread extends Thread {
         try {
             actionMap.put(ClientMsg.SEARCH_USER, (String[] args) ->  sendSuccessMsg(userMapper.getUserByUsername(args[0])));
             actionMap.put(ClientMsg.GET_ALL_USER, (String[] args) -> sendSuccessMsg(userMapper.getAllUser()));
-            actionMap.put(ClientMsg.INSERT_USER, (String[] args) -> sendSuccessMsg(userMapper.insertUser(args[0], args[1])));
-//            actionMap.put(ClientMsg.DELETE_USER, (String[] args) -> sendSuccessMsg(userDao.deleteUser(args[0])));
-//            actionMap.put(ClientMsg.UPDATE_USER, (String[] args) -> sendSuccessMsg(userDao.updateUser(args[0], args[1], args[2], args[3])));
-//
+            actionMap.put(ClientMsg.INSERT_USER, (String[] args) -> sendSuccessMsg(userMapper.insertUser(args[0], args[1], args[2])));
+            actionMap.put(ClientMsg.DELETE_USER, (String[] args) -> sendSuccessMsg(userMapper.deleteUser(Integer.parseInt(args[0]))));
+            actionMap.put(ClientMsg.UPDATE_USER, (String[] args) -> sendSuccessMsg(userMapper.updateUser(Integer.parseInt(args[0]), args[1], args[2], args[3])));
+            actionMap.put(ClientMsg.LIKE_USER, (String[] args) -> sendSuccessMsg(userMapper.getUserByLike(args[0])));
 //            actionMap.put(ClientMsg.GET_ALL_DOC, (String[] args) -> sendSuccessMsg(docDao.getAllDocs()));
 //            actionMap.put(ClientMsg.INSERT_DOC, (String[] args) -> sendSuccessMsg(docDao.insertDoc(args[0], args[1], args[2])));
 //            actionMap.put(ClientMsg.UPDATE_DOC, (String[] args) -> sendSuccessMsg(docDao.updateDoc(args[0])));
