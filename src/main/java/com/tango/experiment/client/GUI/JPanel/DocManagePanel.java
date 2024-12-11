@@ -1,6 +1,7 @@
 package com.tango.experiment.client.GUI.JPanel;
 
 import com.tango.experiment.client.service.DownloadService;
+import com.tango.experiment.client.service.UploadService;
 import com.tango.experiment.client.service.UserAndDocumentService;
 import com.tango.experiment.pojo.Doc;
 import lombok.extern.slf4j.Slf4j;
@@ -134,9 +135,36 @@ public class DocManagePanel extends JPanel implements ActionListener {
     }
 
     private void uploadDocument() {
-        // 模拟上传文档
-        // 你可以通过文件选择器让用户选择文件并上传
-        JOptionPane.showMessageDialog(this, "上传文档功能暂未实现", "功能未实现", JOptionPane.INFORMATION_MESSAGE);
+        // 打开文件选择对话框
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("选择要上传的文件");
+        fileChooser.setFileHidingEnabled(false);  // 显示所有文件，包括隐藏的文件
+
+        // 如果用户选择了文件并点击了“打开”
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            // 获取选中的文件
+            java.io.File selectedFile = fileChooser.getSelectedFile();
+
+            // 获取文件的路径和其他必要信息
+            String fileName = selectedFile.getName();
+            String description = JOptionPane.showInputDialog(this, "请输入文件描述：");
+
+            if (description == null || description.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "文件描述不能为空！");
+                return;
+            }
+
+            new UploadService(selectedFile.getParent(), fileName).run();
+
+            UserAndDocumentService.init();
+            try {
+                UserAndDocumentService.insertDoc(fileName, description);
+                List<Doc> docs = UserAndDocumentService.getAllDoc();
+                loadData(docs);
+            } catch (IOException | ClassNotFoundException ex) {
+                log.error("insertDoc error:{}", ex.getMessage());
+            }
+        }
     }
 
     private void downloadDocument() {

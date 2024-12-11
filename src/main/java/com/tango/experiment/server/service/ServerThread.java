@@ -49,7 +49,7 @@ public class ServerThread extends Thread {
             actionMap.put(ClientMsg.UPDATE_USER, (String[] args) -> sendSuccessMsg(userMapper.updateUser(Integer.parseInt(args[0]), args[1], args[2], args[3])));
             actionMap.put(ClientMsg.LIKE_USER, (String[] args) -> sendSuccessMsg(userMapper.getUserByLike(args[0])));
             actionMap.put(ClientMsg.GET_ALL_DOC, (String[] args) -> sendSuccessMsg(docMapper.getAllDoc()));
-//            actionMap.put(ClientMsg.INSERT_DOC, (String[] args) -> sendSuccessMsg(docDao.insertDoc(args[0], args[1], args[2])));
+            actionMap.put(ClientMsg.INSERT_DOC, (String[] args) -> sendSuccessMsg(docMapper.insertDoc(args[0], args[1])));
             actionMap.put(ClientMsg.UPDATE_DOC, (String[] args) -> sendSuccessMsg(docMapper.updateDoc(args[0])));
             actionMap.put(ClientMsg.EXIT, (String[] args) -> exit());
         } catch(ArrayIndexOutOfBoundsException ex) {
