@@ -100,14 +100,13 @@ public class UserAndDocumentService {
         String[] args = {};
         return ((List<Doc>) writeAndRead(ClientMsg.GET_ALL_DOC, args));
     }
-//
 //    public static void insertDoc(String fileName, String description, String uploadedBy) throws IOException, ClassNotFoundException {
 //        String[] args = {fileName, description, uploadedBy};
 //        writeAndRead(ClientMsg.INSERT_DOC, args);
 //    }
-//
-//    public static void updateDoc(String fileName) throws IOException, ClassNotFoundException {
-//        String[] args = {fileName};
-//        writeAndRead(ClientMsg.UPLOAD_DOC, args);
-//    }
+
+    public static void updateDoc(String fileName) throws IOException, ClassNotFoundException {
+        String[] args = {fileName};
+        writeAndRead(ClientMsg.UPDATE_DOC, args);
+    }
 }

@@ -1,5 +1,6 @@
 package com.tango.experiment.client.GUI.JPanel;
 
+import com.tango.experiment.client.service.DownloadService;
 import com.tango.experiment.client.service.UserAndDocumentService;
 import com.tango.experiment.pojo.Doc;
 import lombok.extern.slf4j.Slf4j;
@@ -140,14 +141,42 @@ public class DocManagePanel extends JPanel implements ActionListener {
 
     private void downloadDocument() {
         int selectedRow = docTable.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "请先选择要下载的文档", "错误", JOptionPane.WARNING_MESSAGE);
-            return;
+        if (selectedRow >= 0) {
+            // 获取文件名
+            String fileName = (String) docTable.getValueAt(selectedRow, 1);
+
+            // 打开文件夹选择框
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("选择下载文件夹");
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); // 只允许选择文件夹
+            fileChooser.setAcceptAllFileFilterUsed(false); // 不显示所有文件过滤器
+
+            // 显示文件夹选择对话框
+            int result = fileChooser.showOpenDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                // 获取选定的文件夹路径
+                String selectedFolderPath = fileChooser.getSelectedFile().getAbsolutePath();
+
+                // 创建 DocDownloadService 并传递文件名和下载路径
+                new DownloadService(fileName, selectedFolderPath).run();
+
+                try {
+                    // 更新文档的下载次数
+                    UserAndDocumentService.init();
+                    UserAndDocumentService.updateDoc(fileName);
+                    List<Doc> updatedDocs = UserAndDocumentService.getAllDoc();
+                    loadData(updatedDocs);
+                } catch (IOException | ClassNotFoundException ex) {
+                    log.error("Failed to update download count: {}", ex.getMessage());
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(this, "下载操作被取消", "提示", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(this, "请选择要下载的文件", "提示", JOptionPane.INFORMATION_MESSAGE);
         }
-        String selectedDocName = (String) tableModel.getValueAt(selectedRow, 1);
-        // 模拟下载文档
-        // 实际上，你需要在这里处理文档下载的逻辑
-        JOptionPane.showMessageDialog(this, "下载文档: " + selectedDocName, "下载", JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override

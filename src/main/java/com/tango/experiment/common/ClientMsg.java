@@ -10,7 +10,7 @@ public class ClientMsg {
     public static final String SEARCH_DOC = "SEARCH_DOC";
     public static final String INSERT_DOC = "INSERT_DOC";
     public static final String GET_ALL_DOC = "GET_ALL_DOC";
-    public static final String UPLOAD_DOC = "UPLOAD_DOC";
+    public static final String UPDATE_DOC = "UPDATE_DOC";
     public static final String EXIT = "EXIT";
     public static final int DOWNLOAD = 1;
     public static final int UPLOAD = 2;
