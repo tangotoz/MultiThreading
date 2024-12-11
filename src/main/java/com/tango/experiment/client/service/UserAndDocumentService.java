@@ -23,7 +23,7 @@ public class UserAndDocumentService {
     private static ObjectInputStream ois;
     private static boolean isConnected = false;
 
-    public static boolean connectServer() {
+    private static boolean connectServer() {
         try {
             log.info("trying to connect server...");
             client = new Socket(serverIp, serverPort);
@@ -106,8 +106,13 @@ public class UserAndDocumentService {
         return ((Integer) writeAndRead(ClientMsg.INSERT_DOC, args) != 0);
     }
 
-    public static void updateDoc(String fileName) throws IOException, ClassNotFoundException {
+    public static boolean updateDoc(String fileName) throws IOException, ClassNotFoundException {
         String[] args = {fileName};
-        writeAndRead(ClientMsg.UPDATE_DOC, args);
+        return ((Integer) writeAndRead(ClientMsg.UPDATE_DOC, args) != 0);
+    }
+
+    public static List<Doc> searchDoc(String keyword) throws IOException, ClassNotFoundException {
+        String[] args = {keyword};
+        return ((List<Doc>) writeAndRead(ClientMsg.SEARCH_DOC, args));
     }
 }

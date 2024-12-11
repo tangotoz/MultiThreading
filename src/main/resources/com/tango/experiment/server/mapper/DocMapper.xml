@@ -11,4 +11,7 @@
     <select id="getAllDoc" resultType="Doc">
         select * from t_doc
     </select>
+    <select id="searchDoc" resultType="com.tango.experiment.pojo.Doc">
+        select * from t_doc where file_name like concat('%', #{keyword}, '%')
+    </select>
 </mapper>

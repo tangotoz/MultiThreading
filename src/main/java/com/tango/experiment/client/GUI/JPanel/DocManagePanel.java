@@ -5,6 +5,13 @@ import com.tango.experiment.client.service.UploadService;
 import com.tango.experiment.client.service.UserAndDocumentService;
 import com.tango.experiment.pojo.Doc;
 import lombok.extern.slf4j.Slf4j;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -21,7 +28,7 @@ public class DocManagePanel extends JPanel implements ActionListener {
     private JTable docTable;
     private DefaultTableModel tableModel;
     private JTextField searchField;
-    private JButton searchButton, uploadButton, downloadButton;
+    private JButton searchButton, uploadButton, downloadButton, statsButton;
     private List<Doc> documents;
 
     public DocManagePanel() {
@@ -66,18 +73,22 @@ public class DocManagePanel extends JPanel implements ActionListener {
         uploadButton = new JButton("上传");
         downloadButton = new JButton("下载");
         searchButton = new JButton("查询");
+        statsButton = new JButton("统计");
 
         uploadButton.setActionCommand("upload");
         downloadButton.setActionCommand("download");
         searchButton.setActionCommand("search");
+        statsButton.setActionCommand("stats");
 
         uploadButton.addActionListener(this);
         downloadButton.addActionListener(this);
         searchButton.addActionListener(this);
+        statsButton.addActionListener(this);
 
         buttonPanel.add(uploadButton);
         buttonPanel.add(downloadButton);
         buttonPanel.add(searchButton);
+        buttonPanel.add(statsButton);
 
         // 设置按钮颜色和样式
         uploadButton.setBackground(new Color(70, 130, 180));
@@ -94,6 +105,11 @@ public class DocManagePanel extends JPanel implements ActionListener {
         searchButton.setForeground(Color.WHITE);
         searchButton.setFocusPainted(false);
         searchButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+
+        statsButton.setBackground(new Color(255, 165, 0));
+        statsButton.setForeground(Color.WHITE);
+        statsButton.setFocusPainted(false);
+        statsButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
         bottomPanel.add(buttonPanel, BorderLayout.EAST);
         add(bottomPanel, BorderLayout.SOUTH);
@@ -126,12 +142,54 @@ public class DocManagePanel extends JPanel implements ActionListener {
             return;
         }
 
-//        try {
-//            documents = UserAndDocumentService.searchDocuments(keyword);
-//            loadData(documents);
-//        } catch (IOException | ClassNotFoundException e) {
-//            log.error("DocManagePanel searchDocuments error: {}", e.getMessage());
-//        }
+        try {
+            documents = UserAndDocumentService.searchDoc(keyword);
+            loadData(documents);
+        } catch (IOException | ClassNotFoundException e) {
+            log.error("DocManagePanel searchDocuments error: {}", e.getMessage());
+        }
+    }
+
+    private void showStatistics() {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        DefaultPieDataset pieDataset = new DefaultPieDataset();
+
+        // 收集下载次数并计算统计数据
+        for (Doc doc : documents) {
+            int downloadCount = doc.getDownloadCount();
+            String fileName = doc.getFileName();
+
+            // 直方图数据
+            dataset.addValue(downloadCount, "Downloads", fileName);
+
+            // 圆饼图数据
+            pieDataset.setValue(fileName, downloadCount);
+        }
+
+        // 创建直方图
+// Create the bar chart
+        JFreeChart barChart = ChartFactory.createBarChart(
+                "下载次数统计", // 图表标题
+                "文件名", // X轴标签
+                "下载次数", // Y轴标签
+                dataset
+        );
+
+        // 创建圆饼图
+        JFreeChart pieChart = ChartFactory.createPieChart(
+                "下载次数分布", // 图表标题
+                pieDataset, // 数据集
+                true, // 显示图例
+                true,
+                false
+        );
+
+        // 显示图表
+        JPanel chartPanel = new JPanel(new GridLayout(1, 2));
+        chartPanel.add(new ChartPanel(barChart));
+        chartPanel.add(new ChartPanel(pieChart));
+
+        JOptionPane.showMessageDialog(this, chartPanel, "下载统计", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void uploadDocument() {
@@ -213,6 +271,7 @@ public class DocManagePanel extends JPanel implements ActionListener {
             case "upload" -> uploadDocument();
             case "download" -> downloadDocument();
             case "search" -> searchDocuments();
+            case "stats" -> showStatistics();
         }
     }
 
@@ -224,36 +283,15 @@ public class DocManagePanel extends JPanel implements ActionListener {
         docTable.getTableHeader().setFont(new Font("Fira Code", Font.BOLD, 14));
 
         docTable.setRowHeight(25);
-        docTable.setGridColor(Color.DARK_GRAY);
-        docTable.setShowGrid(true);
+        docTable.setGridColor(new Color(220, 220, 220));
+        docTable.setSelectionBackground(new Color(173, 216, 230));
 
-        // 确保设置渲染器是为文档列（假设是文档名列）专门指定
-        docTable.setDefaultRenderer(String.class, new CustomTableCellRenderer());
-        resizeColumnWidth(docTable);
-    }
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 
-    class CustomTableCellRenderer extends DefaultTableCellRenderer {
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-            if (isSelected) {
-                c.setBackground(new Color(135, 206, 250)); // 鼠标悬停时变蓝
-                c.setForeground(Color.BLACK);
-            }
-
-            return c;
-        }
-    }
-
-    private void resizeColumnWidth(JTable table) {
-        for (int i = 0; i < table.getColumnCount(); i++) {
-            int width = 100; // 设置默认宽度
-            for (int j = 0; j < table.getRowCount(); j++) {
-                TableColumn column = table.getColumnModel().getColumn(i);
-                width = Math.max(width, table.getValueAt(j, i).toString().length() * 10);
-            }
-            table.getColumnModel().getColumn(i).setPreferredWidth(width);
+        for (int i = 0; i < docTable.getColumnCount(); i++) {
+            TableColumn column = docTable.getColumnModel().getColumn(i);
+            column.setCellRenderer(centerRenderer);
         }
     }
 }

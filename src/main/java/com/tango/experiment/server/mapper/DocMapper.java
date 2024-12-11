@@ -11,4 +11,6 @@ public interface DocMapper {
     int updateDoc(@Param("fileName") String fileName);
 
     int insertDoc(@Param("fileName") String fileName, @Param("description") String description);
+
+    List<Doc> searchDoc(@Param("keyword") String keyword);
 }
