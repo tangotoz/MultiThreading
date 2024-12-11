@@ -1,5 +1,6 @@
 package com.tango.experiment.utils;
 
+import com.tango.experiment.server.mapper.DocMapper;
 import com.tango.experiment.server.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.io.Resources;
@@ -28,5 +29,11 @@ public class SqlSessionUtils {
         SqlSession sqlSession = getSqlSession();
         assert sqlSession != null;
         return sqlSession.getMapper(UserMapper.class);
+    }
+
+    public static DocMapper getDocMapper() {
+        SqlSession sqlSession = getSqlSession();
+        assert sqlSession != null;
+        return sqlSession.getMapper(DocMapper.class);
     }
 }

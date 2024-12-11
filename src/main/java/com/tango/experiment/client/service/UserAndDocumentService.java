@@ -1,6 +1,7 @@
 package com.tango.experiment.client.service;
 
 import com.tango.experiment.common.ClientMsg;
+import com.tango.experiment.pojo.Doc;
 import com.tango.experiment.pojo.User;
 import com.tango.experiment.utils.ConfigUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -95,12 +96,10 @@ public class UserAndDocumentService {
         return ((Integer) writeAndRead(ClientMsg.UPDATE_USER, args) != 0);
     }
 
-//    public static List<Document> getAllDocs() throws IOException, ClassNotFoundException {
-//        String[] args = {};
-//        String json = (String) writeAndRead(ClientMsg.GET_ALL_DOC, args);
-//        return new Gson().fromJson(json, new TypeToken<List<Document>>() {
-//        }.getType());
-//    }
+    public static List<Doc> getAllDoc() throws IOException, ClassNotFoundException {
+        String[] args = {};
+        return ((List<Doc>) writeAndRead(ClientMsg.GET_ALL_DOC, args));
+    }
 //
 //    public static void insertDoc(String fileName, String description, String uploadedBy) throws IOException, ClassNotFoundException {
 //        String[] args = {fileName, description, uploadedBy};

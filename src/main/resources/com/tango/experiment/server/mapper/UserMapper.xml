@@ -5,7 +5,7 @@
         insert into t_user values(null, #{username}, #{password}, #{role}, now(), now())
     </insert>
     <update id="updateUser">
-        update t_user set username=#{username}, password=#{password}, role=#{role}, update_at = now() where user_id = #{userId}
+        update t_user set username=#{username}, password=#{password}, role=#{role}, updated_at = now() where user_id = #{userId}
     </update>
     <delete id="deleteUser">
         delete from t_user where user_id=#{userId}

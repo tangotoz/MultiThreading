@@ -142,6 +142,7 @@ public class LoginFrame extends JFrame implements ActionListener {
         registerButton.addActionListener(this);
 
         add(panel);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
 
@@ -230,9 +231,5 @@ public class LoginFrame extends JFrame implements ActionListener {
         int green = random.nextInt(256);
         int blue = random.nextInt(256);
         return new Color(red, green, blue);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(LoginFrame::new);
     }
 }

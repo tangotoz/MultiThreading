@@ -20,5 +20,4 @@ public class Doc implements Serializable {
     private String description;
     private Timestamp uploadAt;
     private Integer downloadCount;
-    private User user;
 }

@@ -1,16 +1,19 @@
 package com.tango.experiment.client.GUI;
 
+import com.tango.experiment.client.GUI.JPanel.DocManagePanel;
+import com.tango.experiment.client.GUI.JPanel.PersonInfoPanel;
 import com.tango.experiment.client.GUI.JPanel.UserManagePanel;
 import com.tango.experiment.pojo.User;
 
 import javax.swing.*;
 import java.awt.*;
-import java.sql.Timestamp;
 
 public class MainFrame extends JFrame {
     private User user;
+    private LoginFrame loginFrame;
 
     public MainFrame(User user, LoginFrame loginFrame) {
+        this.loginFrame = loginFrame;
         this.user = user;
         init();
     }
@@ -29,20 +32,12 @@ public class MainFrame extends JFrame {
         tabbedPane.addTab("用户管理", userManagePanel);
 
         // 文档管理标签页
-        JPanel documentManagementPanel = new JPanel();
-        documentManagementPanel.setLayout(new BorderLayout());
-        JLabel documentManagementLabel = new JLabel("文档管理", SwingConstants.CENTER);
-        documentManagementLabel.setFont(new Font("Fira Code", Font.BOLD, 20));
-        documentManagementPanel.add(documentManagementLabel, BorderLayout.CENTER);
+        DocManagePanel documentManagementPanel = new DocManagePanel();
         tabbedPane.addTab("文档管理", documentManagementPanel);
 
         // 个人中心标签页
-        JPanel personalCenterPanel = new JPanel();
-        personalCenterPanel.setLayout(new BorderLayout());
-        JLabel personalCenterLabel = new JLabel("个人中心", SwingConstants.CENTER);
-        personalCenterLabel.setFont(new Font("Fira Code", Font.BOLD, 20));
-        personalCenterPanel.add(personalCenterLabel, BorderLayout.CENTER);
-        tabbedPane.addTab("个人中心", personalCenterPanel);
+        PersonInfoPanel personInfoPanel = new PersonInfoPanel(user, this, loginFrame);
+        tabbedPane.addTab("个人中心", personInfoPanel);
 
         // 将标签页添加到主界面
         add(tabbedPane);

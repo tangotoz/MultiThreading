@@ -6,10 +6,14 @@ import com.tango.experiment.utils.MD5Utils;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.List;
 
@@ -25,6 +29,7 @@ public class UserManagePanel extends JPanel implements ActionListener {
 
     public UserManagePanel() {
         init();
+        initTableAppearance();
         try {
             users = UserAndDocumentService.getAllUser();
         } catch (IOException | ClassNotFoundException e) {
@@ -80,6 +85,27 @@ public class UserManagePanel extends JPanel implements ActionListener {
         buttonPanel.add(deleteButton);
         buttonPanel.add(updateButton);
         buttonPanel.add(searchButton);
+
+        // 设置按钮颜色和样式
+        addButton.setBackground(new Color(70, 130, 180));
+        addButton.setForeground(Color.WHITE);
+        addButton.setFocusPainted(false);
+        addButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+
+        deleteButton.setBackground(new Color(220, 20, 60));
+        deleteButton.setForeground(Color.WHITE);
+        deleteButton.setFocusPainted(false);
+        deleteButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+
+        updateButton.setBackground(new Color(100, 149, 237)); // 设置蓝色
+        updateButton.setForeground(Color.WHITE);
+        updateButton.setFocusPainted(false);
+        updateButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+
+        searchButton.setBackground(new Color(34, 139, 34)); // 设置绿色
+        searchButton.setForeground(Color.WHITE);
+        searchButton.setFocusPainted(false);
+        searchButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
         bottomPanel.add(buttonPanel, BorderLayout.EAST);
 
@@ -285,6 +311,59 @@ public class UserManagePanel extends JPanel implements ActionListener {
             case "delete" -> deleteUser();
             case "update" -> updateUser();
             case "search" -> searchUser();
+        }
+    }
+
+    private void initTableAppearance() {
+        userTable.setFont(new Font("Fira Code", Font.PLAIN, 12));
+        userTable.getTableHeader().setBackground(new Color(70, 130, 180));
+        userTable.getTableHeader().setForeground(Color.WHITE);
+        userTable.getTableHeader().setOpaque(true);
+        userTable.getTableHeader().setFont(new Font("Fira Code", Font.BOLD, 14));
+
+        userTable.setRowHeight(25);
+        userTable.setGridColor(Color.DARK_GRAY);
+        userTable.setShowGrid(true);
+
+        // 确保设置渲染器是为角色列（索引3）专门指定
+        userTable.setDefaultRenderer(String.class, new CustomTableCellRenderer());
+        resizeColumnWidth(userTable);
+
+        // 添加鼠标悬停效果
+        userTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                int row = userTable.rowAtPoint(e.getPoint());
+                if (row != -1) {
+                    userTable.setRowSelectionInterval(row, row);
+                }
+            }
+        });
+    }
+
+    class CustomTableCellRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            if (isSelected) {
+                c.setBackground(new Color(135, 206, 250)); // 鼠标悬停时变蓝
+                c.setForeground(Color.BLACK);
+            }
+
+            return c;
+        }
+    }
+
+
+    private void resizeColumnWidth(JTable table) {
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            int width = 100; // 设置默认宽度
+            for (int j = 0; j < table.getRowCount(); j++) {
+                TableColumn column = table.getColumnModel().getColumn(i);
+                width = Math.max(width, table.getValueAt(j, i).toString().length() * 10);
+            }
+            table.getColumnModel().getColumn(i).setPreferredWidth(width);
         }
     }
 

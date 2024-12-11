@@ -22,9 +22,11 @@ public class ServerThread extends Thread {
     private static boolean exit;
     private static final String serverFilepath;
     private static UserMapper userMapper = null;
+    private static DocMapper docMapper = null;
 
     static {
         userMapper = SqlSessionUtils.getUserMapper();
+        docMapper = SqlSessionUtils.getDocMapper();
         serverFilepath = ConfigUtils.getValue("server_filepath");
     }
 
@@ -46,7 +48,7 @@ public class ServerThread extends Thread {
             actionMap.put(ClientMsg.DELETE_USER, (String[] args) -> sendSuccessMsg(userMapper.deleteUser(Integer.parseInt(args[0]))));
             actionMap.put(ClientMsg.UPDATE_USER, (String[] args) -> sendSuccessMsg(userMapper.updateUser(Integer.parseInt(args[0]), args[1], args[2], args[3])));
             actionMap.put(ClientMsg.LIKE_USER, (String[] args) -> sendSuccessMsg(userMapper.getUserByLike(args[0])));
-//            actionMap.put(ClientMsg.GET_ALL_DOC, (String[] args) -> sendSuccessMsg(docDao.getAllDocs()));
+            actionMap.put(ClientMsg.GET_ALL_DOC, (String[] args) -> sendSuccessMsg(docMapper.getAllDoc()));
 //            actionMap.put(ClientMsg.INSERT_DOC, (String[] args) -> sendSuccessMsg(docDao.insertDoc(args[0], args[1], args[2])));
 //            actionMap.put(ClientMsg.UPDATE_DOC, (String[] args) -> sendSuccessMsg(docDao.updateDoc(args[0])));
             actionMap.put(ClientMsg.EXIT, (String[] args) -> exit());
